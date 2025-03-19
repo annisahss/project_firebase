@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project_firebase/components/square_tile.dart';
 import 'package:project_firebase/pages/forgot_pw_page.dart';
+import 'package:project_firebase/components/my_button.dart';
+import 'package:project_firebase/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -23,17 +26,42 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Future signIn() async {
+    //show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false, //prevent user from dismissing it manually
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      //close loading indicator
+      Navigator.of(context).pop();
+
+      //show success message
       Fluttertoast.showToast(
         msg: 'Login successful!',
         backgroundColor: Colors.green,
       );
     } on FirebaseAuthException catch (e) {
+      //close loading indicator
+      Navigator.of(context).pop();
+
+      //show error message
       showToast(widget.getFirebaseErrorMessage(e.code));
     }
   }
@@ -49,13 +77,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
@@ -66,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // change the icon or logo
-                Icon(Icons.android, size: 100),
-                SizedBox(height: 75),
+                Icon(Icons.lock, size: 100),
+                SizedBox(height: 25),
 
                 //Hello again!
                 Text(
@@ -78,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 Text(
                   'Welcome Back, you\'ve been missed!',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 20, color: Colors.grey[700]),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 25),
 
                 //email textfield
                 Padding(
@@ -96,7 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderSide: BorderSide(color: Colors.deepPurple),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      hintText: 'Email',
+                      hintText: 'Username',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
@@ -120,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       hintText: 'Password',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
@@ -146,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           'Forgot password?',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: Colors.grey[600],
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -155,33 +178,54 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                SizedBox(height: 10),
+                SizedBox(height: 25),
 
                 //sign in button
+                MyButton(text: 'Sign In', onTap: signIn),
+
+                const SizedBox(height: 25),
+
+                //or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(
-                    onTap: signIn,
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple,
-                        borderRadius: BorderRadius.circular(12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
                       ),
-                      child: Center(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
+                          'or continue with',
+                          style: TextStyle(color: Colors.grey[700]),
                         ),
                       ),
-                    ),
+                      Expanded(
+                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 25),
+
+                const SizedBox(height: 25),
+
+                //google + apple sign in buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //google button
+                    SquareTile(
+                      onTap: () => AuthService().signInWithGoogle(),
+                      imagePath: 'lib/images/google.png',
+                    ),
+
+                    SizedBox(width: 10),
+                    // //apple button
+                    // SquareTile(imagePath: 'lib/images/apple.jpg'),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
 
                 // not a member? register now
                 Row(
@@ -191,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Not a member?',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    const SizedBox(width: 4),
                     GestureDetector(
                       onTap: widget.showRegisterPage,
                       child: Text(

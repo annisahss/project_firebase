@@ -10,13 +10,32 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  //toggle between login and register pages
+  //initially show login page
   bool showLoginPage = true;
 
+  //toggle between login and register pages
   void toggleScreens() {
     setState(() {
       showLoginPage = !showLoginPage;
     });
+  }
+
+  //function to validate user input
+  String? validateInput({
+    String? email,
+    String? password,
+    String? confirmPassword,
+  }) {
+    if (email == null || email.trim().isEmpty) {
+      return 'Email cannot be empty';
+    }
+    if (password == null || password.trim().isEmpty) {
+      return 'Password cannot be empty';
+    }
+    if (confirmPassword != null && password != confirmPassword) {
+      return 'Password do not match';
+    }
+    return null; //no errors
   }
 
   //function to handle firebase authentication errors
@@ -49,11 +68,13 @@ class _AuthPageState extends State<AuthPage> {
       return LoginPage(
         showRegisterPage: toggleScreens,
         getFirebaseErrorMessage: getFirebaseErrorMessage, // pass the function
+        validateInput: validateInput, //pass validation function
       );
     } else {
       return RegisterPage(
         showLoginPage: toggleScreens,
         getFirebaseErrorMessage: getFirebaseErrorMessage, // pass the function
+        validateInput: validateInput, //pass validation function
       );
     }
   }
