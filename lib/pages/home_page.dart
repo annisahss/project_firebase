@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'signed in as: ' + user.email!,
+              'signed in as: ${user.email!}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
 

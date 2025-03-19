@@ -53,8 +53,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
           MaterialButton(
             onPressed: () {},
-            child: Text('Reset Password'),
             color: Colors.deepPurple[200],
+            child: Text('Reset Password'),
           ),
         ],
       ),

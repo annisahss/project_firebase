@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -32,17 +33,21 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future signUp() async {
     if (!passwordConfirmed()) {
-      showErrorDialog('Passwords do not match.');
+      showToast('Passwords do not match.');
       return;
     }
+
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      print('Registration successful!');
+      Fluttertoast.showToast(
+        msg: 'Registration successful!',
+        backgroundColor: Colors.green,
+      );
     } on FirebaseAuthException catch (e) {
-      showErrorDialog(widget.getFirebaseErrorMessage(e.code));
+      showToast(widget.getFirebaseErrorMessage(e.code));
     }
   }
 
@@ -51,21 +56,13 @@ class _RegisterPageState extends State<RegisterPage> {
         _confirmpasswordController.text.trim();
   }
 
-  void showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      gravity: ToastGravity.BOTTOM,
+      toastLength: Toast.LENGTH_LONG,
     );
   }
 
