@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_firebase/pages/login_page.dart';
 import 'package:project_firebase/pages/register_page.dart';
+import 'package:project_firebase/services/auth_service.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -10,72 +11,55 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  //initially show login page
   bool showLoginPage = true;
+  final AuthService _authService = AuthService();
 
-  //toggle between login and register pages
   void toggleScreens() {
     setState(() {
       showLoginPage = !showLoginPage;
     });
   }
 
-  //function to validate user input
+  // Validation function for RegisterPage
   String? validateInput({
     String? email,
     String? password,
     String? confirmPassword,
   }) {
-    if (email == null || email.trim().isEmpty) {
-      return 'Email cannot be empty';
+    if (email == null || email.isEmpty) return "Email cannot be empty";
+    if (!RegExp(
+      r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+    ).hasMatch(email)) {
+      return "Enter a valid email address";
     }
-    if (password == null || password.trim().isEmpty) {
-      return 'Password cannot be empty';
-    }
-    if (confirmPassword != null && password != confirmPassword) {
-      return 'Password do not match';
-    }
-    return null; //no errors
-  }
+    if (password == null || password.isEmpty) return "Password cannot be empty";
+    if (password.length < 6)
+      return "Password must be at least 6 characters long";
+    if (confirmPassword == null || confirmPassword.isEmpty)
+      return "Confirm password cannot be empty";
+    if (password != confirmPassword) return "Passwords do not match";
 
-  //function to handle firebase authentication errors
-  String getFirebaseErrorMessage(String errorCode) {
-    switch (errorCode) {
-      case 'invalid-email':
-        return 'The email adress is not valid.';
-      case 'email-already-in-use':
-        return 'This email adress is already registered. Please log in';
-      case 'user-not-found':
-        return 'No account found with this email. Please sign up.';
-      case 'wrong-password':
-        return 'Incorrect password. Please try again.';
-      case 'weak-password':
-        return 'The password is too weak. Please choose a stronger password';
-      case 'too many requests':
-        return 'Too many failed attempts. Please try again later.';
-      case 'network-request-failed':
-        return 'Network error. Check your internet.';
-      case 'user-disabled':
-        return 'This account is disabled. Contact support for help.';
-      default:
-        return 'An unknown error occured. Try again.';
-    }
+    return null; // No validation errors
   }
 
   @override
   Widget build(BuildContext context) {
-    if (showLoginPage) {
-      return LoginPage(
-        showRegisterPage: toggleScreens,
-        getFirebaseErrorMessage: getFirebaseErrorMessage, // pass the function
-        validateInput: validateInput, //pass validation function
-      );
-    } else {
-      return RegisterPage(
-        showLoginPage: toggleScreens,
-        getFirebaseErrorMessage: getFirebaseErrorMessage, // pass the function
-        validateInput: validateInput, //pass validation function
-      );
-    }
+    return showLoginPage
+        ? LoginPage(
+          showRegisterPage: toggleScreens,
+          getFirebaseErrorMessage: _authService.getFirebaseErrorMessage,
+          signInWithGoogle:
+              _authService
+                  .signInWithGoogle, // ✅ FIXED: Ensure Google Sign-in is passed
+        )
+        : RegisterPage(
+          showLoginPage: toggleScreens,
+          getFirebaseErrorMessage: _authService.getFirebaseErrorMessage,
+          validateInput:
+              validateInput, // ✅ FIXED: Ensure function signature matches expected format
+          signInWithGoogle:
+              _authService
+                  .signInWithGoogle, // ✅ FIXED: Ensure Google Sign-in is passed
+        );
   }
 }

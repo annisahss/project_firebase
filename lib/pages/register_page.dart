@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_firebase/components/square_tile.dart';
-import 'package:project_firebase/pages/forgot_pw_page.dart';
 import 'package:project_firebase/components/my_button.dart';
+import 'package:project_firebase/pages/forgot_pw_page.dart';
 import 'package:project_firebase/services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -16,11 +15,13 @@ class RegisterPage extends StatefulWidget {
     String? confirmPassword,
   })
   validateInput;
+  final Future<UserCredential?> Function() signInWithGoogle;
 
   const RegisterPage({
     required this.showLoginPage,
     required this.getFirebaseErrorMessage,
     required this.validateInput,
+    required this.signInWithGoogle,
     super.key,
   });
 
@@ -29,59 +30,27 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  //text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _confirmpasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmpasswordController.dispose();
-    super.dispose();
-  }
-
-  Future signUp() async {
-    String email: _emailController.text.trim();
-    String password: _passwordController.text.trim();
-    String confirmPassword: _passwordController.text.trim();
-
-    //use centralized validation
+  Future<void> signUp() async {
     String? errorMessage = widget.validateInput(
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+      confirmPassword: _confirmPasswordController.text.trim(),
     );
 
     if (errorMessage != null) {
-      showToast(errorMessage);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
       return;
     }
 
-    //try creating the user
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      Fluttertoast.showToast(
-        msg: 'Registration successful!',
-        backgroundColor: Colors.green,
-      );
-    } on FirebaseAuthException catch (e) {
-      showToast(widget.getFirebaseErrorMessage(e.code));
-    }
-  }
-
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      gravity: ToastGravity.BOTTOM,
-      toastLength: Toast.LENGTH_LONG,
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
     );
   }
 
@@ -161,20 +130,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: TextField(
                     obscureText: true,
-                    controller: _passwordController,
+                    controller: _confirmPasswordController, // Change this line
                     decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      hintText: 'Confirm Password',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      fillColor: Colors.grey[200],
-                      filled: true,
+                      // ... existing decoration code
                     ),
                   ),
                 ),
@@ -211,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 SizedBox(height: 25),
 
-                //sign up button
+                // sign up button
                 MyButton(text: 'Sign Up', onTap: signUp),
 
                 const SizedBox(height: 25),

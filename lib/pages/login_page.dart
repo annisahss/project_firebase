@@ -1,19 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project_firebase/components/my_button.dart';
 import 'package:project_firebase/components/square_tile.dart';
 import 'package:project_firebase/pages/forgot_pw_page.dart';
-import 'package:project_firebase/components/my_button.dart';
 import 'package:project_firebase/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
   final String Function(String) getFirebaseErrorMessage;
+  final Future<UserCredential?> Function() signInWithGoogle;
 
   const LoginPage({
     required this.showRegisterPage,
     required this.getFirebaseErrorMessage,
+    required this.signInWithGoogle,
     super.key,
   });
 
@@ -22,58 +23,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  Future signIn() async {
-    //show loading indicator
-    showDialog(
-      context: context,
-      barrierDismissible: false, //prevent user from dismissing it manually
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-
+  Future<void> signIn() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-
-      //close loading indicator
-      Navigator.of(context).pop();
-
-      //show success message
-      Fluttertoast.showToast(
-        msg: 'Login successful!',
-        backgroundColor: Colors.green,
-      );
     } on FirebaseAuthException catch (e) {
-      //close loading indicator
-      Navigator.of(context).pop();
-
-      //show error message
-      showToast(widget.getFirebaseErrorMessage(e.code));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(widget.getFirebaseErrorMessage(e.code))),
+      );
     }
-  }
-
-  void showToast(String message) {
-    Fluttertoast.showToast(
-      msg: message,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      gravity: ToastGravity.BOTTOM,
-      toastLength: Toast.LENGTH_LONG,
-    );
   }
 
   @override

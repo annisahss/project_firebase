@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -8,32 +10,68 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  //text controllers
-  final _emailController = TextEditingController();
+  // Email Controller
+  final TextEditingController _emailController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  // Function to send password reset email
+  Future<void> resetPassword() async {
+    String email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      showToast('Please enter your email');
+      return;
+    }
+
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      showToast('Password reset link sent to $email');
+    } on FirebaseAuthException catch (e) {
+      showToast(e.message ?? 'Something went wrong');
+    }
+  }
+
+  // Show Toast Message
+  void showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+      gravity: ToastGravity.BOTTOM,
+      toastLength: Toast.LENGTH_LONG,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.deepPurple[200], elevation: 0),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Text(
-              'Enter your email and we will send you a password reset link',
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple[200],
+        elevation: 0,
+        title: Text("Forgot Password"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Enter your email, and we will send you a password reset link',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 18),
             ),
-          ),
+            const SizedBox(height: 20),
 
-          SizedBox(height: 10),
-
-          //email textfield
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            // Email Input Field
+            TextField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
@@ -48,15 +86,28 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 filled: true,
               ),
             ),
-          ),
-          SizedBox(height: 10),
+            const SizedBox(height: 20),
 
-          MaterialButton(
-            onPressed: () {},
-            color: Colors.deepPurple[200],
-            child: Text('Reset Password'),
-          ),
-        ],
+            // Reset Password Button
+            ElevatedButton(
+              onPressed: resetPassword,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 30,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Reset Password',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
