@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project_firebase/auth/auth_page.dart';
+import 'package:project_firebase/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -11,11 +13,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final AuthService _authService = AuthService();
   final user = FirebaseAuth.instance.currentUser!;
 
   //sign user out method
   void signUserOut() {
-    FirebaseAuth.instance.signOut();
+    _authService.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => AuthPage()),
+    );
   }
 
   @override

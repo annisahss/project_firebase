@@ -27,16 +27,21 @@ class _AuthPageState extends State<AuthPage> {
     String? confirmPassword,
   }) {
     if (email == null || email.isEmpty) return "Email cannot be empty";
+
     if (!RegExp(
       r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
     ).hasMatch(email)) {
       return "Enter a valid email address";
     }
+
     if (password == null || password.isEmpty) return "Password cannot be empty";
+
     if (password.length < 6)
       return "Password must be at least 6 characters long";
+
     if (confirmPassword == null || confirmPassword.isEmpty)
       return "Confirm password cannot be empty";
+
     if (password != confirmPassword) return "Passwords do not match";
 
     return null; // No validation errors
@@ -47,19 +52,15 @@ class _AuthPageState extends State<AuthPage> {
     return showLoginPage
         ? LoginPage(
           showRegisterPage: toggleScreens,
-          getFirebaseErrorMessage: _authService.getFirebaseErrorMessage,
-          signInWithGoogle:
+          getFirebaseErrorMessage:
               _authService
-                  .signInWithGoogle, // ✅ FIXED: Ensure Google Sign-in is passed
+                  .getFirebaseErrorMessage, // ✅ FIXED: Ensure Google Sign-in is passed
         )
         : RegisterPage(
           showLoginPage: toggleScreens,
           getFirebaseErrorMessage: _authService.getFirebaseErrorMessage,
           validateInput:
-              validateInput, // ✅ FIXED: Ensure function signature matches expected format
-          signInWithGoogle:
-              _authService
-                  .signInWithGoogle, // ✅ FIXED: Ensure Google Sign-in is passed
+              validateInput, // ✅ FIXED: Ensure function signature matches expected format// ✅ FIXED: Ensure Google Sign-in is passed
         );
   }
 }

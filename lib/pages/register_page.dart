@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project_firebase/auth/auth_page.dart';
 import 'package:project_firebase/components/square_tile.dart';
 import 'package:project_firebase/components/my_button.dart';
 import 'package:project_firebase/pages/forgot_pw_page.dart';
@@ -15,13 +16,11 @@ class RegisterPage extends StatefulWidget {
     String? confirmPassword,
   })
   validateInput;
-  final Future<UserCredential?> Function() signInWithGoogle;
 
   const RegisterPage({
     required this.showLoginPage,
     required this.getFirebaseErrorMessage,
     required this.validateInput,
-    required this.signInWithGoogle,
     super.key,
   });
 
@@ -48,10 +47,15 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      setState(() {
+        widget.showLoginPage;
+      });
+    } catch (e) {}
   }
 
   @override
@@ -130,13 +134,35 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: TextField(
                     obscureText: true,
-                    controller: _confirmPasswordController, // Change this line
+                    controller: _confirmPasswordController,
                     decoration: InputDecoration(
-                      // ... existing decoration code
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      hintText: 'Confirm Password',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                      fillColor: Colors.grey[200],
+                      filled: true,
                     ),
                   ),
                 ),
                 SizedBox(height: 10),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: TextField(
+                //     obscureText: true,
+                //     controller: _confirmPasswordController, // Change this line
+                //     decoration: InputDecoration(
+                //       // ... existing decoration code
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 10),
 
                 //forgot password
                 Padding(
@@ -173,46 +199,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 MyButton(text: 'Sign Up', onTap: signUp),
 
                 const SizedBox(height: 25),
-
-                //or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 25),
-
-                //google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //google button
-                    SquareTile(
-                      onTap: () => AuthService().signInWithGoogle(),
-                      imagePath: 'lib/images/google.png',
-                    ),
-
-                    SizedBox(width: 10),
-                    // //apple button
-                    // SquareTile(imagePath: 'lib/images/apple.jpg'),
-                  ],
-                ),
 
                 const SizedBox(height: 25),
 

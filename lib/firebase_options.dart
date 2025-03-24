@@ -17,29 +17,17 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -53,10 +41,53 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCYRdz7h3N_PlgDhYnUd5sZSdRbalRmDwc',
-    appId: '1:6886164713:android:5965dec706113cecc3c878',
-    messagingSenderId: '6886164713',
-    projectId: 'project-firebase-b2e02',
-    storageBucket: 'project-firebase-b2e02.firebasestorage.app',
+    apiKey: 'AIzaSyAE3Q3MpbAEYfbOOpmmsLSWjpBMKh-5TGc',
+    appId: '1:350815746161:android:ad1050d7daca4d8f82c3d0',
+    messagingSenderId: '350815746161',
+    projectId: 'ppkd-mp',
+    storageBucket: 'ppkd-mp.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBCNgSZW6BYG-PPa7SL7E4MUB8uttOQH20',
+    appId: '1:350815746161:web:24941346d98f73f482c3d0',
+    messagingSenderId: '350815746161',
+    projectId: 'ppkd-mp',
+    authDomain: 'ppkd-mp.firebaseapp.com',
+    storageBucket: 'ppkd-mp.firebasestorage.app',
+    measurementId: 'G-XG72TLRKC5',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAqU7XEEj-yWM6zr4FKtQuZ79aSzb8RrbA',
+    appId: '1:350815746161:ios:354b4f7e68fb0a4782c3d0',
+    messagingSenderId: '350815746161',
+    projectId: 'ppkd-mp',
+    storageBucket: 'ppkd-mp.firebasestorage.app',
+    androidClientId: '350815746161-5vd6voli5gfgn5duonvsfk3in9mqh7vv.apps.googleusercontent.com',
+    iosClientId: '350815746161-m92f1qhqbh5mmut2ua3s01tit69kk000.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projectFirebase',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAqU7XEEj-yWM6zr4FKtQuZ79aSzb8RrbA',
+    appId: '1:350815746161:ios:354b4f7e68fb0a4782c3d0',
+    messagingSenderId: '350815746161',
+    projectId: 'ppkd-mp',
+    storageBucket: 'ppkd-mp.firebasestorage.app',
+    androidClientId: '350815746161-5vd6voli5gfgn5duonvsfk3in9mqh7vv.apps.googleusercontent.com',
+    iosClientId: '350815746161-m92f1qhqbh5mmut2ua3s01tit69kk000.apps.googleusercontent.com',
+    iosBundleId: 'com.example.projectFirebase',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBCNgSZW6BYG-PPa7SL7E4MUB8uttOQH20',
+    appId: '1:350815746161:web:5c58bc94cedf48c482c3d0',
+    messagingSenderId: '350815746161',
+    projectId: 'ppkd-mp',
+    authDomain: 'ppkd-mp.firebaseapp.com',
+    storageBucket: 'ppkd-mp.firebasestorage.app',
+    measurementId: 'G-08EFMWKD4V',
+  );
+
 }

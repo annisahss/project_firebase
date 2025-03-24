@@ -4,17 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:project_firebase/components/my_button.dart';
 import 'package:project_firebase/components/square_tile.dart';
 import 'package:project_firebase/pages/forgot_pw_page.dart';
+import 'package:project_firebase/pages/home_page.dart';
 import 'package:project_firebase/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
   final String Function(String) getFirebaseErrorMessage;
-  final Future<UserCredential?> Function() signInWithGoogle;
 
   const LoginPage({
     required this.showRegisterPage,
     required this.getFirebaseErrorMessage,
-    required this.signInWithGoogle,
     super.key,
   });
 
@@ -23,6 +22,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final AuthService _authService = AuthService();
+
+  void _handleSignIn() async {
+    User? user = await _authService.signInWithGoogle();
+    if (user != null) {
+      // Pindah ke HomePage jika login sukses
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Gagal login, coba lagi!")));
+    }
+  }
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -31,6 +47,10 @@ class _LoginPageState extends State<LoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -178,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     //google button
                     SquareTile(
-                      onTap: () => AuthService().signInWithGoogle(),
+                      onTap: () => _handleSignIn(),
                       imagePath: 'lib/images/google.png',
                     ),
 
