@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_firebase/pages/login_page.dart';
-import 'package:project_firebase/pages/register_page.dart';
+import 'package:project_firebase/pages/login/login_page.dart';
+import 'package:project_firebase/pages/login/register_page.dart';
 import 'package:project_firebase/services/auth_service.dart';
 
 class AuthPage extends StatefulWidget {
@@ -36,11 +36,13 @@ class _AuthPageState extends State<AuthPage> {
 
     if (password == null || password.isEmpty) return "Password cannot be empty";
 
-    if (password.length < 6)
+    if (password.length < 6) {
       return "Password must be at least 6 characters long";
+    }
 
-    if (confirmPassword == null || confirmPassword.isEmpty)
+    if (confirmPassword == null || confirmPassword.isEmpty) {
       return "Confirm password cannot be empty";
+    }
 
     if (password != confirmPassword) return "Passwords do not match";
 
@@ -54,13 +56,12 @@ class _AuthPageState extends State<AuthPage> {
           showRegisterPage: toggleScreens,
           getFirebaseErrorMessage:
               _authService
-                  .getFirebaseErrorMessage, // ✅ FIXED: Ensure Google Sign-in is passed
+                  .getFirebaseErrorMessage, //  Ensure Google Sign-in is passed
         )
         : RegisterPage(
           showLoginPage: toggleScreens,
           getFirebaseErrorMessage: _authService.getFirebaseErrorMessage,
-          validateInput:
-              validateInput, // ✅ FIXED: Ensure function signature matches expected format// ✅ FIXED: Ensure Google Sign-in is passed
+          validateInput: validateInput, // Ensure Google Sign-in is passed
         );
   }
 }

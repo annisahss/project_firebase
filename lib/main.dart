@@ -1,15 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project_firebase/auth/auth_page.dart';
+import 'package:project_firebase/pages/auth/auth_page.dart';
 import 'package:project_firebase/firebase_options.dart';
-import 'package:project_firebase/auth/main_page.dart';
-import 'package:project_firebase/pages/home_page.dart';
+import 'package:project_firebase/services/storage/storage_service.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => StorageService(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

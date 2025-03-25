@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project_firebase/auth/auth_page.dart';
+import 'package:project_firebase/pages/auth/auth_page.dart';
 import 'package:project_firebase/pages/home_page.dart';
 
 class MainPage extends StatelessWidget {

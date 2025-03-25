@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_firebase/components/my_button.dart';
 import 'package:project_firebase/components/square_tile.dart';
-import 'package:project_firebase/pages/forgot_pw_page.dart';
-import 'package:project_firebase/pages/home_page.dart';
+import 'package:project_firebase/pages/landing_page.dart';
+import 'package:project_firebase/pages/login/forgot_pw_page.dart';
 import 'package:project_firebase/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,11 +26,13 @@ class _LoginPageState extends State<LoginPage> {
 
   void _handleSignIn() async {
     User? user = await _authService.signInWithGoogle();
+    print(user);
     if (user != null) {
-      // Pindah ke HomePage jika login sukses
+      print("Masuk");
+      // Pindah ke Landing Page jika login sukses
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => LandingPage()),
       );
     } else {
       ScaffoldMessenger.of(
@@ -50,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => LandingPage()),
       );
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -70,19 +72,22 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // change the icon or logo
-                Icon(Icons.lock, size: 100),
+                Image.asset('assets/images/logo.png'),
                 SizedBox(height: 25),
 
-                //Hello again!
+                //Assalamualaikum
                 Text(
-                  'Hello Again!',
-                  style: GoogleFonts.bebasNeue(fontSize: 52),
+                  'Assalamualaikum',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 40,
+                    color: Color(0xffE69DB8),
+                  ),
                 ),
                 SizedBox(height: 10),
 
                 Text(
-                  'Welcome Back, you\'ve been missed!',
-                  style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                  'Welcome Home, Champs!',
+                  style: TextStyle(fontSize: 16, color: Color(0xffBE5985)),
                 ),
                 SizedBox(height: 25),
 
@@ -93,16 +98,16 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: BorderSide(color: Color(0xffBE5985)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepPurple),
+                        borderSide: BorderSide(color: Color(0xffBE5985)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       hintText: 'Username',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      fillColor: Colors.grey[200],
+                      hintStyle: TextStyle(color: Color(0xffFFB8E0)),
+                      fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
@@ -117,16 +122,16 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                        borderSide: BorderSide(color: Color(0xffBE5985)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.deepPurple),
+                        borderSide: BorderSide(color: Color(0xffBE5985)),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.grey[500]),
-                      fillColor: Colors.grey[200],
+                      hintStyle: TextStyle(color: Color(0xffFFB8E0)),
+                      fillColor: Colors.white,
                       filled: true,
                     ),
                   ),
@@ -152,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           'Forgot password?',
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: Color(0xffBE5985),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -174,17 +179,23 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Color(0xffBE5985),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                           'or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
+                          style: TextStyle(color: Color(0xffFFB8E0)),
                         ),
                       ),
                       Expanded(
-                        child: Divider(thickness: 0.5, color: Colors.grey[700]),
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Color(0xffBE5985),
+                        ),
                       ),
                     ],
                   ),
@@ -192,14 +203,14 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 25),
 
-                //google + apple sign in buttons
+                //google sign in buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //google button
                     SquareTile(
                       onTap: () => _handleSignIn(),
-                      imagePath: 'lib/images/google.png',
+                      imagePath: 'assets/images/google.png',
                     ),
 
                     SizedBox(width: 10),
@@ -216,7 +227,10 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text(
                       'Not a member?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffFFB8E0),
+                      ),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
@@ -224,7 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         ' Register now',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Color(0xffBE5985),
                           fontWeight: FontWeight.bold,
                         ),
                       ),

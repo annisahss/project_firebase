@@ -16,7 +16,7 @@ class MyButton extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: isDisabled ? Colors.grey : Colors.black,
+          color: isDisabled ? Colors.grey : Color(0xffEFDCE9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             if (!isDisabled)
@@ -32,7 +32,7 @@ class MyButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: isDisabled ? Colors.white60 : Colors.white,
+              color: isDisabled ? Colors.grey : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

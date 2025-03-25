@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  carousel_slider: ^5.0.0
   cloud_firestore: ^5.6.5
   cupertino_icons: ^1.0.8
   custom_youtube_player_flutter: ^9.0.10
@@ -39,6 +40,8 @@ dependencies:
   fluttertoast: ^8.2.12
   google_fonts: ^6.2.1
   google_sign_in: ^6.3.0
+  image_picker: ^1.1.2
+  provider: ^6.1.2
   youtube_player_flutter: ^9.1.1
 
 dev_dependencies:
@@ -57,7 +60,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/images/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
