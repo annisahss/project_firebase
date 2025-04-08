@@ -23,6 +23,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Assalamualaikum ${widget.user.email ?? 'User Email'}'),
+      ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             // Carousel Banner
             CarouselSlider(
               options: CarouselOptions(
-                height: 400.0,
+                height: 250.0,
                 autoPlay: true,
                 enlargeCenterPage: true,
                 enlargeStrategy: CenterPageEnlargeStrategy.height,
@@ -54,6 +58,8 @@ class _HomePageState extends State<HomePage> {
                     );
                   }).toList(),
             ),
+            const SizedBox(height: 20),
+            Container(),
           ],
         ),
       ),

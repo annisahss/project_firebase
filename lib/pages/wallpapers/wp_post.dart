@@ -12,13 +12,13 @@ class WpPost extends StatelessWidget {
     return Consumer<StorageService>(
       builder:
           (context, storageService, child) => Container(
-            decoration: BoxDecoration(color: Color(0xffEFDCE9)),
+            decoration: BoxDecoration(color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 //delete button
                 Container(
-                  color: Color(0xffEFDCE9),
+                  color: Colors.white,
                   child: IconButton(
                     onPressed: () => storageService.deleteImage(imageUrl),
 

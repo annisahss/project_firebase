@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:project_firebase/pages/auth/auth_page.dart';
 import 'package:project_firebase/pages/home_page.dart';
 import 'package:project_firebase/pages/letters/letters_feed.dart';
-import 'package:project_firebase/pages/library/library_feed.dart';
+import 'package:project_firebase/pages/library/library_home_screen.dart';
+// import 'package:project_firebase/pages/library/library_viewer_screen.dart';
 import 'package:project_firebase/pages/wallpapers/wp_feed.dart';
 import 'package:project_firebase/pages/youtube/yt_feed.dart';
 import 'package:project_firebase/services/auth_service.dart';
@@ -111,9 +112,9 @@ class _LandingPageState extends State<LandingPage> {
             onTap:
                 () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LibraryFeed()),
+                  MaterialPageRoute(builder: (context) => LibraryHomeScreen()),
                 ),
-            child: LibraryFeed(),
+            child: LibraryHomeScreen(),
           ),
           GestureDetector(
             onTap:

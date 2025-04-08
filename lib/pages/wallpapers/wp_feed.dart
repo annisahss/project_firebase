@@ -33,7 +33,15 @@ class WpFeedgetState extends State<WpFeed> {
         //home page wallpapers feed UI
         return Scaffold(
           appBar: AppBar(
-            title: Text(storageService.isUploading ? 'Uploading..' : ''),
+            title: Text(
+              storageService.isUploading ? 'Uploading..' : '',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey,
+                backgroundColor: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => storageService.uploadImage(),
