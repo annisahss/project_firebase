@@ -77,17 +77,22 @@ class _LoginPageState extends State<LoginPage> {
 
                 //Assalamualaikum
                 Text(
-                  'Assalamualaikum',
+                  'Assalamualaikum,',
                   style: GoogleFonts.bebasNeue(
-                    fontSize: 40,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
                     color: Color(0xffE69DB8),
                   ),
                 ),
                 SizedBox(height: 10),
 
                 Text(
-                  'Welcome Home, Champs!',
-                  style: TextStyle(fontSize: 16, color: Color(0xffBE5985)),
+                  'Champions!',
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffE69DB8),
+                  ),
                 ),
                 SizedBox(height: 25),
 

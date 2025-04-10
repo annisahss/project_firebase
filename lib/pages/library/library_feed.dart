@@ -1,17 +1,17 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'library_viewer_screen.dart';
+import 'library_view.dart';
 import 'dart:io';
 
-class LibraryHomeScreen extends StatefulWidget {
-  const LibraryHomeScreen({super.key});
+class LibraryFeed extends StatefulWidget {
+  const LibraryFeed({super.key});
 
   @override
-  State<LibraryHomeScreen> createState() => _LibraryHomeScreenState();
+  State<LibraryFeed> createState() => _LibraryFeedState();
 }
 
-class _LibraryHomeScreenState extends State<LibraryHomeScreen> {
+class _LibraryFeedState extends State<LibraryFeed> {
   List<Map<String, String>> _pdfFiles = [];
 
   @override
@@ -51,7 +51,14 @@ class _LibraryHomeScreenState extends State<LibraryHomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Firebase PDF Library"),
+        title: const Text(
+          'Champs Library',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xffE69DB8),
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.upload_file),
@@ -78,7 +85,7 @@ class _LibraryHomeScreenState extends State<LibraryHomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                (_) => LibraryViewerScreen(
+                                (_) => LibraryView(
                                   pdfName: file['name']!,
                                   pdfUrl: file['url']!,
                                 ),

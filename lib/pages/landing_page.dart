@@ -2,12 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_firebase/pages/auth/auth_page.dart';
 import 'package:project_firebase/pages/home_page.dart';
-import 'package:project_firebase/pages/letters/letters_feed.dart';
-import 'package:project_firebase/pages/library/library_home_screen.dart';
-// import 'package:project_firebase/pages/library/library_viewer_screen.dart';
-import 'package:project_firebase/pages/wallpapers/wp_feed.dart';
-import 'package:project_firebase/pages/youtube/yt_feed.dart';
-import 'package:project_firebase/services/auth_service.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -17,129 +11,48 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  final AuthService _authService = AuthService();
   final user = FirebaseAuth.instance.currentUser!;
-  int _selectedIndex = 0;
+  int _selectedIndex = 1; // Default to Home Page
 
-  //sign user out method
-  void signUserOut() {
-    _authService.signOut();
+  void signUserOut() async {
+    await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => AuthPage()),
+      MaterialPageRoute(builder: (context) => const AuthPage()),
     );
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2) {
+      signUserOut();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/hp_bg.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.grey[700]),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.grey[700]),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.logout, color: Colors.grey[700]),
-            onPressed: signUserOut,
-          ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          Center(
+            child: Text('Profile Page Coming Soon'),
+          ), // Profile Placeholder
+          HomePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.pink[200],
-        unselectedItemColor: Colors.grey[700],
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home Page'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_arrow),
-            label: 'Meet Up',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book_rounded),
-            label: 'Library',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pages_rounded),
-            label: 'Love Letters',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wallpaper_rounded),
-            label: 'Wallpapers',
-          ),
-        ],
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                ),
-            child: HomePage(),
-          ),
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => YtFeed()),
-                ),
-            child: YtFeed(),
-          ),
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LibraryHomeScreen()),
-                ),
-            child: LibraryHomeScreen(),
-          ),
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LettersFeed()),
-                ),
-            child: LettersFeed(),
-          ),
-          GestureDetector(
-            onTap:
-                () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => WpFeed()),
-                ),
-            child: WpFeed(),
-          ),
-          // GestureDetector(
-          //   onTap:
-          //       () => Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => MixtapesFeed()),
-          //       ),
-          //   child: MixtapesFeed(),
-          // ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.logout), label: 'Logout'),
         ],
       ),
     );

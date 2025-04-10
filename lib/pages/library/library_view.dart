@@ -4,21 +4,17 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
-class LibraryViewerScreen extends StatefulWidget {
+class LibraryView extends StatefulWidget {
   final String pdfUrl;
   final String pdfName;
 
-  const LibraryViewerScreen({
-    required this.pdfUrl,
-    required this.pdfName,
-    super.key,
-  });
+  const LibraryView({required this.pdfUrl, required this.pdfName, super.key});
 
   @override
-  State<LibraryViewerScreen> createState() => _LibraryViewerScreenState();
+  State<LibraryView> createState() => _LibraryViewState();
 }
 
-class _LibraryViewerScreenState extends State<LibraryViewerScreen> {
+class _LibraryViewState extends State<LibraryView> {
   String? localPath;
   bool isLoading = true;
 

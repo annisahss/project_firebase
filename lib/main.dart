@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_firebase/pages/auth/auth_page.dart';
 import 'package:project_firebase/firebase_options.dart';
-import 'package:project_firebase/pages/home_screen.dart';
 import 'package:project_firebase/services/storage/storage_service.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../youtube/yt_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final videoUrls = [
   'https://www.youtube.com/watch?v=nZdjDG1wBus',
@@ -17,11 +18,24 @@ class YtFeed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Center(child: Text('The Sunday Sessions'))),
+      appBar: AppBar(
+        title: Text(
+          'Sunday Session',
+          style: GoogleFonts.bebasNeue(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xffE69DB8),
+          ),
+        ),
+      ),
       body: ListView.builder(
         itemCount: videoUrls.length,
         itemBuilder: (context, index) {
           final videoID = YoutubePlayer.convertUrlToId(videoUrls[index]);
+
+          if (videoID == null) {
+            return const SizedBox.shrink(); // Handle invalid video ID gracefully
+          }
 
           return InkWell(
             onTap: () {
@@ -31,7 +45,14 @@ class YtFeed extends StatelessWidget {
                 ),
               );
             },
-            child: Image.network(YoutubePlayer.getThumbnail(videoId: videoID!)),
+            child: Image.network(
+              YoutubePlayer.getThumbnail(videoId: videoID),
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(
+                  Icons.error,
+                ); // Handle thumbnail loading error
+              },
+            ),
           );
         },
       ),
